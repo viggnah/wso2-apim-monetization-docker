@@ -1,0 +1,104 @@
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          format: int64
+          type: integer
+        description:
+          description: A detail description about the error message.
+          type: string
+        error:
+          description: If there are more than one error list them out. Ex. list out
+            validation errors by each field.
+          items:
+            $ref: '#/components/schemas/ErrorListItem'
+          type: array
+        message:
+          description: Error message.
+          type: string
+        moreInfo:
+          description: Preferably an url with more details about the error.
+          type: string
+      required:
+      - code
+      - message
+      title: Error object returned with 4XX HTTP status
+    ErrorListItem:
+      properties:
+        code:
+          format: int64
+          type: integer
+        message:
+          description: Description about individual errors
+          type: string
+      required:
+      - code
+      - message
+      title: Description of individual errors that may have occurred during a request.
+    MenuItem:
+      properties:
+        description:
+          type: string
+        image:
+          type: string
+        name:
+          type: string
+        price:
+          type: string
+      required:
+      - name
+      title: Pizza menu Item
+info:
+  contact:
+    email: architecture@pizzashack.com
+    name: John Doe
+    url: http://www.pizzashack.com
+  description: |
+    This is a RESTFul API for Pizza Shack online pizza delivery store.
+  title: PizzaShackAPI
+  version: 1.0.0
+openapi: 3.0.0
+paths:
+  /menu:
+    get:
+      description: Return a list of available menu items
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/MenuItem'
+                type: array
+          description: OK. List of APIs is returned.
+        "406":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Acceptable. The requested media type is not supported
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        optional: false
+        security-types:
+        - oauth2
+x-wso2-api-key-header: ApiKey
+x-wso2-application-security:
+  optional: false
+  security-types:
+  - oauth2
+x-wso2-auth-header: Authorization
+x-wso2-basePath: /pizzashack/1.0.0
+x-wso2-production-endpoints:
+  type: http
+  urls:
+  - https://localhost:9500/am/sample/pizzashack/v1/api/
+x-wso2-sandbox-endpoints:
+  type: http
+  urls:
+  - https://localhost:9500/am/sample/pizzashack/v1/api/
+x-wso2-transports:
+- http
+- https

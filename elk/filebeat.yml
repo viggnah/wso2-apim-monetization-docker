@@ -1,0 +1,30 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+        - /usr/share/filebeat/logs/apim_metrics.log
+    include_lines: ['(apimMetrics):']
+
+# filebeat.inputs:
+# - type: journald
+#   id: everything
+
+# filebeat.autodiscover:
+#   providers:
+#     - type: docker
+#       # hints.enabled: true
+#       templates:
+#         - condition:
+#             contains:
+#               docker.container.name: wso2-apim
+#           config:
+#             - type: container
+#               paths:
+#                 - "/var/lib/docker/containers/${data.docker.container.id}/*.log"
+#               include_lines: ['(apimMetrics):']
+
+# output.logstash:
+#   hosts: ["logstash:5044"]
+
+output.console:
+  pretty: true
