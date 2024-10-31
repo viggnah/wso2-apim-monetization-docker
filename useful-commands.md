@@ -42,7 +42,12 @@ tar -xzf apictl-4.3.1-darwin-arm64.tar.gz -C /usr/local/bin
 curl -LO https://github.com/wso2/product-apim-tooling/releases/download/v4.3.1/apictl-4.3.1-linux-amd64.tar.gz
 tar -xzf apictl-4.3.1-linux-amd64.tar.gz -C /usr/local/bin
 
-
 # API readiness
 API Manager is ready by checking /Services/Version, then you import the API but it takes a further 10 seconds to be pulled to the GW. In the interim the GW healthcheck says it's successfult because it has 0 APIs to start with (??)
+
+# Logstash Conf is Absolutely Quirky
+After failing to run logstash for an eternity, narrowed it down to the conf file. Then just ran the container, copied the conf file and did a validation:
+`logstash@logstash:~/pipeline$ /usr/share/logstash/bin/logstash --config.test_and_exit -f /usr/share/logstash/pipeline/logstash-2.conf`
+Turns out if the last line in the logstash.conf is commented out, you need a new line after that!!
+
 

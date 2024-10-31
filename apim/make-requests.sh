@@ -12,7 +12,6 @@ DCR_RESPONSE=$(curl -sk -X POST https://localhost:9500/client-registration/v0.17
     "grantType": "password refresh_token",
     "saasApp": true
 }')
-
 # Extract clientId and clientSecret using grep and awk
 CLIENT_ID=$(echo $DCR_RESPONSE | grep -o '"clientId":"[^"]*' | awk -F'"' '{print $4}')
 CLIENT_SECRET=$(echo $DCR_RESPONSE | grep -o '"clientSecret":"[^"]*' | awk -F'"' '{print $4}')
@@ -76,7 +75,6 @@ KEY_MAPPING_ID=$(echo "$RESPONSE" | grep -o '"keyMappingId":"[^"]*' | awk -F'"' 
 CONSUMER_SECRET=$(echo "$RESPONSE" | grep -o '"consumerSecret":"[^"]*' | awk -F'"' '{print $4}')
 echo "App Keys Generated"
 
-
 echo "Generating Application Tokens..."
 APP_ACCESS_TOKEN=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/applications/$APPLICATION_UUID/oauth-keys/$KEY_MAPPING_ID/generate-token" \
 -H "Authorization: Bearer $ACCESS_TOKEN" \
@@ -89,15 +87,9 @@ APP_ACCESS_TOKEN=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/
 echo "Application Tokens Generated"
 
 echo "Trying to make PizzaShackAPI calls..."
-for i in {1..5}; do
-  while [[ $(curl -sk -o /dev/null -w ''%{http_code}'' "https://localhost:8300/pizzashack/1.0.0/menu" \
-              -H "accept: application/json" \
-              -H "Authorization: Bearer $APP_ACCESS_TOKEN") != "200" ]]; do
-    echo "Waiting for PizzaShackAPI to be deployed..."
-    sleep 2
-  done
-  # curl -sk -o /dev/null "https://localhost:8300/pizzashack/1.0.0/menu" \
-  #   -H "accept: application/json" \
-  #   -H "Authorization: Bearer $APP_ACCESS_TOKEN"
+for i in {1..1}; do
+  curl -sk -o /dev/null "https://localhost:8300/pizzashack/1.0.0/menu" \
+    -H "accept: application/json" \
+    -H "Authorization: Bearer $APP_ACCESS_TOKEN"
 done
-echo "Made 5 PizzaShackAPI calls"
+echo "Made some PizzaShackAPI calls"
