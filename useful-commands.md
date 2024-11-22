@@ -1,6 +1,17 @@
 # Starting container
 docker run -it -p 8337:8337 -p 8300:8300 -p 9500:9500 --name api-manager wso2/wso2am:4.3.0-rocky
 
+# Starting a container with memory and cpu limits and custom deployment.toml
+docker run -it --rm \
+  --cpus="2" \
+  --memory="2g" \
+  --name wso2-apim-test \
+  -p 8337:8337 \
+  -p 8300:8300 \
+  -p 9500:9500 \
+  -v /Users/viggnah/Products/test-apps/wso2-apim-monetization-docker/apim/deployment.toml:/home/wso2carbon/wso2am-4.3.0/repository/conf/deployment.toml \
+  wso2/wso2am:4.3.0-rocky
+
 # SSHing into the container
 docker exec -it docker-monetization_mysql_1 bash
 mysql -u wso2carbon -p
@@ -19,8 +30,21 @@ USE WSO2AM_DB;
 show variables like "character_set_database";
 
 # Check on elasticsearch
+docker exec -it elasticsearch bash
 curl -u elastic:changeme http://elasticsearch:9200
-curl http://elasticsearch:9200/index_name?apim_event_response
+curl -X GET "http://elasticsearch:9200/apim_event_response/_search?pretty" -u "elastic:changeme" -H 'Content-Type: application/json' -d '{
+  "query": {
+    "match_all": {}
+  },
+  "size": 5,
+  "sort": [
+    {
+      "@timestamp": {
+        "order": "desc"
+      }
+    }
+  ]
+}'
 
 # Running fluentd locally
 docker run -d --name fluentd -p 24224:24224 -p 24224:24224/udp fluent/fluentd:v1.17.1-debian-1.0

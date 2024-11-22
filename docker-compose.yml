@@ -22,39 +22,39 @@ services:
   #     retries: 5
   #     start_period: 30s
   
-  wso2-apim:
-    # image: wso2/wso2am:4.3.0-rocky
-    build:
-      context: ./apim
-    container_name: wso2-apim
-    ports:
-      - "8337:8337"
-      - "8300:8300"
-      - "9500:9500"
-    volumes:
-      - ./apim/deployment.toml:/home/wso2carbon/wso2am-4.3.0/repository/conf/deployment.toml
-      - shared_logs:/home/wso2carbon/wso2am-4.3.0/repository/logs
-      # - ./apim/log4j2.properties:/home/wso2carbon/wso2am-4.3.0/repository/conf/log4j2.properties
-      # - ./apim/mysql-connector-java-8.0.29.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/mysql-connector-java-8.0.29.jar
-    # logging:
-    #   driver: fluentd
-    #   options:
-    #     fluentd-address: localhost:24224
-    #     tag: wso2-apim
-    # depends_on:
-    #   mysql:
-    #     condition: service_healthy
+  # wso2-apim:
+  #   # image: wso2/wso2am:4.3.0-rocky
+  #   build:
+  #     context: ./apim
+  #   container_name: wso2-apim
+  #   ports:
+  #     - "8337:8337"
+  #     - "8300:8300"
+  #     - "9500:9500"
+  #   volumes:
+  #     - ./apim/deployment.toml:/home/wso2carbon/wso2am-4.3.0/repository/conf/deployment.toml
+  #     - shared_logs:/home/wso2carbon/wso2am-4.3.0/repository/logs
+  #     # - ./apim/log4j2.properties:/home/wso2carbon/wso2am-4.3.0/repository/conf/log4j2.properties
+  #     # - ./apim/mysql-connector-java-8.0.29.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/mysql-connector-java-8.0.29.jar
+  #   # logging:
+  #   #   driver: fluentd
+  #   #   options:
+  #   #     fluentd-address: localhost:24224
+  #   #     tag: wso2-apim
+  #   # depends_on:
+  #   #   mysql:
+  #   #     condition: service_healthy
 
-  fluentd:
-    image: fluent/fluentd:v1.17.1-debian-1.0
-    container_name: fluentd-agent
-    user: root
-    volumes:
-      - ./elk/fluent.conf:/fluentd/etc/fluent.conf
-      - shared_logs:/logs
-    ports:
-      - "24224:24224"
-      - "24224:24224/udp"
+  # fluentd:
+  #   image: fluent/fluentd:v1.17.1-debian-1.0
+  #   container_name: fluentd-agent
+  #   user: root
+  #   volumes:
+  #     - ./elk/fluent.conf:/fluentd/etc/fluent.conf
+  #     - shared_logs:/logs
+  #   ports:
+  #     - "24224:24224"
+  #     - "24224:24224/udp"
 
   # filebeat:
   #   image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
@@ -68,26 +68,26 @@ services:
   #   #   - --strict.perms=false
   #   command: ["filebeat", "-e", "-strict.perms=false"]
   
-  logstash:
-    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
-    container_name: logstash
-    command:
-      - /bin/bash
-      - -c
-      - |
-        echo "Waiting for Elasticsearch availability";
-        until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 1; done;
-        echo "Starting logstash";
-        /usr/share/logstash/bin/logstash -f /usr/share/logstash/pipeline/logstash.conf
-    environment:
-      - xpack.monitoring.enabled=false
-      # - ELASTIC_USER=${ELASTIC_USERNAME}
-      - ELASTIC_USER=elastic
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - ELASTIC_HOSTS=http://elasticsearch:9200
-      # - LOG_LEVEL=debug
-    volumes:
-      - ./elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+  #   container_name: logstash
+  #   command:
+  #     - /bin/bash
+  #     - -c
+  #     - |
+  #       echo "Waiting for Elasticsearch availability";
+  #       until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 1; done;
+  #       echo "Starting logstash";
+  #       /usr/share/logstash/bin/logstash -f /usr/share/logstash/pipeline/logstash.conf
+  #   environment:
+  #     - xpack.monitoring.enabled=false
+  #     # - ELASTIC_USER=${ELASTIC_USERNAME}
+  #     - ELASTIC_USER=elastic
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #     - ELASTIC_HOSTS=http://elasticsearch:9200
+  #     # - LOG_LEVEL=debug
+  #   volumes:
+  #     - ./elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
 
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
@@ -100,7 +100,7 @@ services:
       - -c
       - |
         echo "Waiting for Elasticsearch availability";
-        until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+        until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 15; done;
         echo "Setting kibana_system password";
         until curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://elasticsearch:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
         echo "All done!";
@@ -121,20 +121,20 @@ services:
       - xpack.security.http.ssl.enabled=false
       - cluster.routing.allocation.disk.threshold_enabled=false
 
-  # kibana:
-  #   image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-  #   container_name: kibana
-  #   ports:
-  #     - 5601:5601
-  #   environment:
-  #     # remember the container_name for elasticsearch?
-  #     # we use it here to access that container
-  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-  #     - ELASTICSEARCH_USERNAME=${ELASTIC_USERNAME}
-  #     - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
-  #     # Change this to true if you want to sent
-  #     # telemetry data to kibana developers
-  #     - TELEMETRY_ENABLED=false
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      # remember the container_name for elasticsearch?
+      # we use it here to access that container
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=${KIBANA_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      # Change this to true if you want to sent
+      # telemetry data to kibana developers
+      - TELEMETRY_ENABLED=false
 
 volumes:
 #   mysql_data:
