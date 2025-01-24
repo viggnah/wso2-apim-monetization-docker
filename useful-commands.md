@@ -15,6 +15,7 @@ docker run -it --rm \
 # SSHing into the container
 docker exec -it docker-monetization_mysql_1 bash
 mysql -u wso2carbon -p
+apt-get update && apt-get install telnet
 
 # Fix Rancher Desktop startup issue
 sudo mkdir -m 775 /private/var/run/rancher-desktop-lima
@@ -69,9 +70,11 @@ tar -xzf apictl-4.3.1-linux-amd64.tar.gz -C /usr/local/bin
 # API readiness
 API Manager is ready by checking /Services/Version, then you import the API but it takes a further 10 seconds to be pulled to the GW. In the interim the GW healthcheck says it's successfult because it has 0 APIs to start with (??)
 
-# Logstash Conf is Absolutely Quirky
+# Logstash Conf is absolutely quirky
 After failing to run logstash for an eternity, narrowed it down to the conf file. Then just ran the container, copied the conf file and did a validation:
 `logstash@logstash:~/pipeline$ /usr/share/logstash/bin/logstash --config.test_and_exit -f /usr/share/logstash/pipeline/logstash-2.conf`
 Turns out if the last line in the logstash.conf is commented out, you need a new line after that!!
 
+# fluentd forward plugin buffers by default!
+It flushes the buffer every 60s. I had to set flush_mode to immediate so it never buffers!!
 

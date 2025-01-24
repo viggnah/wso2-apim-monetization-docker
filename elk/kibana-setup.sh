@@ -19,7 +19,7 @@ done
 
 # Import saved objects
 echo "Importing saved objects from ndjson file..."
-curl -X POST "$KIBANA_URL/api/saved_objects/_import?overwrite=true" \
+curl -s -o /dev/null -X POST "$KIBANA_URL/api/saved_objects/_import?overwrite=true" \
     -u $ELASTIC_USER:$ELASTIC_PASSWORD \
     -H "kbn-xsrf: true" \
     --form file=@"$NDJSON_FILE"

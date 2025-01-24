@@ -1,6 +1,6 @@
 #!/bin/sh
 
-alias docker=nerdctl
+# alias docker=nerdctl
 
 docker compose down --remove-orphans
 docker compose up -d
@@ -16,15 +16,15 @@ done
 chmod +x ./apim/make-requests.sh
 ./apim/make-requests.sh
 
-# echo -e "\n\n--- Service Access Information ---"
-# echo "API Manager"
-# echo "URL: https://localhost:9500/publisher/apis"
-# echo "Username: admin"
-# echo "Password: admin"
+echo -e "\n\n--- Service Access Information ---"
+echo "API Manager"
+echo "URL: https://localhost:9500/publisher/apis"
+echo "Username: admin"
+echo "Password: admin"
 
-# echo -e "\nKibana Dashboard"
-# echo "URL: http://localhost:5601/app/dashboards#/view/f954a940-6ed4-11ec-9007-b93f9eb88870"
-# echo "Username: elastic"
-# echo "Password: changeme"
+echo -e "\nKibana Dashboard"
+echo "URL: http://localhost:5601/app/dashboards#/view/f954a940-6ed4-11ec-9007-b93f9eb88870"
+echo "Username: elastic"
+echo "Password: changeme"
 
 docker compose logs -f
