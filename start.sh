@@ -19,16 +19,16 @@ chmod +x ./apim/make-requests.sh
 chmod +x ./apim/update-tenant-admin-key.sh
 ./apim/update-tenant-admin-key.sh
 
-echo -e "\n\n--- Service Access Information ---"
+echo "\n\n--- Service Access Information ---"
 echo "API Manager"
 echo "URL: https://localhost:9500/publisher/apis"
 echo "Username: admin"
 echo "Password: admin"
 
-echo -e "\nKibana Dashboard"
+echo "\nKibana Dashboard"
 echo "URL: http://localhost:5601/app/dashboards#/view/f954a940-6ed4-11ec-9007-b93f9eb88870"
 echo "Username: elastic"
 echo "Password: changeme"
-echo -e "\n\n"
+echo "\n"
 
-docker compose logs -f
+# docker compose logs -f

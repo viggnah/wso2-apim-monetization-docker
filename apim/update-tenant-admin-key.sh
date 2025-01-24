@@ -1,3 +1,4 @@
+# Step 1: Register DCR client
 DCR_RESPONSE=$(curl -sk -X POST https://localhost:9500/client-registration/v0.17/register \
 -H "Authorization: Basic YWRtaW46YWRtaW4=" \
 -H "Content-Type: application/json" \
@@ -16,12 +17,13 @@ CLIENT_SECRET=$(echo $DCR_RESPONSE | grep -o '"clientSecret":"[^"]*' | awk -F'"'
 ENCODED_CREDENTIALS=$(echo -n "$CLIENT_ID:$CLIENT_SECRET" | base64)
 
 # Step 3: Get access token
-echo "Getting access token..."
 ACCESS_TOKEN=$(curl -sk https://localhost:9500/oauth2/token \
 -H "Authorization: Basic $ENCODED_CREDENTIALS" \
 -d "grant_type=password&username=admin&password=admin&scope=apim:admin" | grep -o '"access_token":"[^"]*' | awk -F'"' '{print $4}')
 
-curl -sk -o /dev/null -X PUT https://localhost:9500/api/am/admin/v4/tenant-config \
+echo "Inserting BillingEnginePlatformAccountKey..."
+# curl -sk -o /dev/null -X PUT https://localhost:9500/api/am/admin/v4/tenant-config \
+curl -k -X PUT https://localhost:9500/api/am/admin/v4/tenant-config \
 -H "Authorization: Bearer $ACCESS_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{

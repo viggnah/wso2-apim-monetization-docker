@@ -1,3 +1,9 @@
+https://apim.docs.wso2.com/en/4.3.0/design/api-monetization/monetizing-an-api/
+Have done all prereqs (B). Have to verify step 5. Step 5 not working, getting unauthenticated request but manually doing seems to be working...
+Also, currently using my monetization jar (1.4.2), have to check if ELK works with the new default monetization jar (1.5.0).
+
+Fluentd occassionally fails to start. 
+
 Out of the blue, getting this error:
 ERROR - GlobalThrowableMapper Error while importing API:  Failed to get API
 wso2-apim      | Error importing API.
@@ -14,15 +20,8 @@ why persist?? I'm doing the API creation on every spin up anyway so just let it 
 
 It's ok now, but still doing the import even if it's commented out!
 
-
-https://apim.docs.wso2.com/en/4.3.0/design/api-monetization/monetizing-an-api/
-Have done all prereqs (B). Have to verify step 5. 
-Also, currently using my monetization jar (1.4.2), have to check if ELK works with the new default monetization jar (1.5.0).
-
 Why is logstash concatenating the message for both events apim:faulty and apim:response?? 
 Only apim:response, the last event is getting processed, apim:faulty is being sent to UNWANTED.
 It's because the events are being batched and sent or picked up together - logstash not processing lines one by one!
 But when I curl after sshing into fluentd, the message goes to logstash immediately! So something wrong with fluentd forwarding??
 Yes, fluentd forward plugin is buffered by default, flushing every 60s, so I had to set flush_mode to immediate so it never buffers!!
-
-Fluentd occassionally fails to start. 
