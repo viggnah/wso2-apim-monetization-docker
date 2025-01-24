@@ -14,15 +14,15 @@ create_admin_account = true
 type = "database_unique_id"
 
 [database.apim_db]
-type = "h2"
-url = "jdbc:h2:./repository/database/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE"
-username = "wso2carbon"
-password = "wso2carbon"
-# type = "mysql"
-# url = "jdbc:mysql://mysql:3306/WSO2AM_DB?useSSL=false&amp;allowPublicKeyRetrieval=true"
+# type = "h2"
+# url = "jdbc:h2:./repository/database/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE"
 # username = "wso2carbon"
 # password = "wso2carbon"
-# driver = "com.mysql.cj.jdbc.Driver"
+type = "mysql"
+url = "jdbc:mysql://mysql:3306/WSO2AM_DB?useSSL=false&amp;allowPublicKeyRetrieval=true"
+username = "wso2carbon"
+password = "wso2carbon"
+driver = "com.mysql.cj.jdbc.Driver"
 
 [database.shared_db]
 type = "h2"
@@ -107,6 +107,19 @@ gateway_labels =["Default"]
 enable = true
 # auth_token = ""
 type = "elk"
+
+[apim.monetization]
+monetization_impl = "org.wso2.apim.monetization.impl.StripeMonetizationImpl"
+analytics_host = "elasticsearch"
+analytics_port = 9200
+analytics_username = "elastic"
+analytics_password = "changeme"
+
+[[apim.monetization.additional_attributes]]
+name = "ConnectedAccountKey"
+display_name = "ConnectedAccountKey"
+required = "true"
+description = "Connected account of the publisher eg: acct_1L2XXuLfF1iJabcL"
 
 [apim.ai]
 enable = true

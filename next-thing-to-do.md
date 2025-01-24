@@ -1,5 +1,23 @@
-Do monetization!
-- Stripe account creation, blah blah blah
+Out of the blue, getting this error:
+ERROR - GlobalThrowableMapper Error while importing API:  Failed to get API
+wso2-apim      | Error importing API.
+wso2-apim      | Status: 500
+wso2-apim      | Response: {"code":900967,"message":"General Error","description":"Server Error Occurred","moreInfo":"","error":[]}
+wso2-apim      | apictl: Error importing API Reason: 500
+wso2-apim      | Exit status 1
+
+That's because now I'm using mysql and the data is getting persisted! I can confirm the API is still in the database
+Even when I comment out the api import commands in `custom-entrypoint.sh`, it still attempts to import, and also getting:
+ERROR - APIUtil Failed to retrieve /internal/data/v1/apis from remote endpoint: Error while retrieving /internal/data/v1/apis. Received response with status code 500.
+
+why persist?? I'm doing the API creation on every spin up anyway so just let it be, I think I persisted when I didn't have automation to create APIs set up...
+
+It's ok now, but still doing the import even if it's commented out!
+
+
+https://apim.docs.wso2.com/en/4.3.0/design/api-monetization/monetizing-an-api/
+Have done all prereqs (B). Have to verify step 5. 
+Also, currently using my monetization jar (1.4.2), have to check if ELK works with the new default monetization jar (1.5.0).
 
 Why is logstash concatenating the message for both events apim:faulty and apim:response?? 
 Only apim:response, the last event is getting processed, apim:faulty is being sent to UNWANTED.

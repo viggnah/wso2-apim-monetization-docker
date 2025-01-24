@@ -50,9 +50,10 @@ curl -X GET "http://elasticsearch:9200/apim_event_response/_search?pretty" -u "e
 # Running fluentd locally
 docker run -d --name fluentd -p 24224:24224 -p 24224:24224/udp fluent/fluentd:v1.17.1-debian-1.0
 
-# Stuff
+# Interesting Rancher tidbit
 Rancher desktop doesn't run natively on MacOS. It runs a Lima VM and runs on top of that. To access the Lima VM use - `rdctl shell`
 
+# Logging driver bug on nerdctl
 nerdctl only supports the following logging drivers as of now - **fluetnd, journald, json-file and syslog**. NO support for gelf and others which are supported by docker. 
 
 The unsolvable error - `FATA[0000] no log viewer type registered for logging driver "fluentd"`
