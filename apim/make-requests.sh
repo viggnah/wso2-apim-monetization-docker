@@ -87,7 +87,7 @@ APP_ACCESS_TOKEN=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/
 echo "Application Tokens Generated"
 
 echo "Trying to make PizzaShackAPI calls..."
-for i in {1..1}; do
+for i in {1..5}; do
   curl -sk -o /dev/null "https://localhost:8300/pizzashack/1.0.0/menu" \
     -H "accept: application/json" \
     -H "Authorization: Bearer $APP_ACCESS_TOKEN"
