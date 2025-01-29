@@ -15,7 +15,3 @@ password: admin
 2. Kibana Dashboard: http://localhost:5601/app/dashboards#/view/f954a940-6ed4-11ec-9007-b93f9eb88870  
 username: elastic  
 password: changeme
-
-# Assumptions
-Stripe test secret key is common?? - The one from here is https://docs.stripe.com/keys:
-sk_test_51M2UGxDOGSYXTPvjsjVpnw5CyhLxmabgG7r8rMwzo2s85lAf7jDRFUcxVbFV9u7ehbLrt9RbLFQRe1au2sXv21O3003jpwqSGg

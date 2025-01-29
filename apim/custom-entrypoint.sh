@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Call the original entrypoint script
-/home/wso2carbon/docker-entrypoint.sh &
+./docker-entrypoint.sh &
 
 # Wait for the WSO2 API Manager to be ready
 until curl -sk https://localhost:9500/services/Version | grep -q "WSO2 API Manager"; do
@@ -9,10 +9,13 @@ until curl -sk https://localhost:9500/services/Version | grep -q "WSO2 API Manag
     sleep 5
 done
 
+./update-tenant-admin-key.sh
+./create-commercial-sub-policy.sh
+
 # Run apictl commands
 apictl add env dev --apim https://localhost:9500
 apictl login dev -u admin -p admin
-apictl import api -f /home/wso2carbon/PizzaShackAPI -e dev
+apictl import api -f PizzaShackAPI -e dev
 
 # Keep the container running
 wait

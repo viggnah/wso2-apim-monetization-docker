@@ -13,22 +13,19 @@ while [[ $(curl -sk -o /dev/null -w "%{http_code}" https://localhost:8300/pizzas
     sleep 10
 done
 
-chmod +x ./apim/make-requests.sh
-./apim/make-requests.sh
+# chmod +x ./apim/make-requests.sh
+# ./apim/make-requests.sh
 
-chmod +x ./apim/update-tenant-admin-key.sh
-./apim/update-tenant-admin-key.sh
+# echo "\n\n--- Service Access Information ---"
+# echo "API Manager"
+# echo "URL: https://localhost:9500/publisher/apis"
+# echo "Username: admin"
+# echo "Password: admin"
 
-echo "\n\n--- Service Access Information ---"
-echo "API Manager"
-echo "URL: https://localhost:9500/publisher/apis"
-echo "Username: admin"
-echo "Password: admin"
-
-echo "\nKibana Dashboard"
-echo "URL: http://localhost:5601/app/dashboards#/view/f954a940-6ed4-11ec-9007-b93f9eb88870"
-echo "Username: elastic"
-echo "Password: changeme"
-echo "\n"
+# echo "\nKibana Dashboard"
+# echo "URL: http://localhost:5601/app/dashboards#/view/f954a940-6ed4-11ec-9007-b93f9eb88870"
+# echo "Username: elastic"
+# echo "Password: changeme"
+# echo "\n"
 
 # docker compose logs -f

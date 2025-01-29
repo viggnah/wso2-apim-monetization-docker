@@ -16,7 +16,7 @@ data:
   - http
   - https
   policies:
-  - Unlimited
+  - SampleMonetizationPolicy
   visibility: PUBLIC
   endpointConfig:
     endpoint_type: http
