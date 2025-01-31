@@ -37,7 +37,7 @@ services:
       - ./apim/mysql-connector-java-8.0.29.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/mysql-connector-java-8.0.29.jar
       - ./apim/stripe-java-9.8.0.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/stripe-java-9.8.0.jar
       - ./apim/jakarta.json-api-2.1.1.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/jakarta.json-api-2.1.1.jar
-      - ./apim/org.wso2.apim.monetization.impl-1.4.2.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/org.wso2.apim.monetization.impl-1.4.2.jar
+      - ./apim/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar
       - ./apim/default-workflow-extensions.xml:/home/wso2carbon/wso2am-4.3.0/repository/resources/default-workflow-extensions.xml
     # logging:
     #   driver: fluentd

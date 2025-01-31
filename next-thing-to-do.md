@@ -1,5 +1,16 @@
 https://apim.docs.wso2.com/en/4.3.0/design/api-monetization/monetizing-an-api/
+Error connecting to elastic to fetch data and publish to stripe to account for the API calls. Some HTTP async missing library issue
+
 Also, currently using my monetization jar (1.4.2), have to check if ELK works with the new default monetization jar (1.5.0).
+
+
+
+
+
+
+
+
+
 
 When I add 'properties' into the monetization subscription plan API call, it fails, unable to get the Hash map or something. Asked chatgpt and it just told me to check the key, such an obvious thing, and it's currencyType, not just currency. Also, then had another error and figured that we are not converting MONTH to lower case like we do for currency so that was throwing an error on Stripe's end, luckily figured out how to see the Stripe logs on their end under the failed plan creation. 
 

@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Load the secrets
+if [ -f apim/secrets.env ]; then
+  source apim/secrets.env
+else
+  echo "Secrets file not found!"
+  exit 1
+fi
+
 # Step 1: Register DCR client
 echo "Registering DCR client..."
 DCR_RESPONSE=$(curl -sk -X POST https://localhost:9500/client-registration/v0.17/register \
@@ -23,7 +31,20 @@ ENCODED_CREDENTIALS=$(echo -n "$CLIENT_ID:$CLIENT_SECRET" | base64)
 echo "Getting access token..."
 ACCESS_TOKEN=$(curl -sk https://localhost:9500/oauth2/token \
 -H "Authorization: Basic $ENCODED_CREDENTIALS" \
--d "grant_type=password&username=admin&password=admin&scope=apim:subscribe apim:app_manage apim:sub_manage apim:app_import_export" | grep -o '"access_token":"[^"]*' | awk -F'"' '{print $4}')
+-d "grant_type=password&username=admin&password=admin&scope=apim:subscribe apim:app_manage apim:sub_manage apim:app_import_export apim:api_publish apim:api_manage" | grep -o '"access_token":"[^"]*' | awk -F'"' '{print $4}')
+
+API_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/apis" | grep -o '"id":"[^"]*' | awk -F'"' '{print $4}')
+
+echo "Enabling monetization for API..."
+curl -k -X POST "https://localhost:9500/api/am/publisher/v4/apis/$API_UUID/monetize" \
+-H "Authorization: Bearer $ACCESS_TOKEN" \
+-H "Content-Type: application/json" \
+-d "{
+  \"enabled\": true,
+  \"properties\": {
+    \"ConnectedAccountKey\": \"$ConnectedAccountKey\"
+  }
+}"
 
 echo "Creating App in Devportal..."
 APPLICATION_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/applications?query=SampleMonetizationApp" \
@@ -46,8 +67,6 @@ APPLICATION_UUID=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/
 }' | grep -o '"applicationId":"[^"]*' | awk -F'"' '{print $4}')
 echo "App Created"
 
-API_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/apis" | grep -o '"id":"[^"]*' | awk -F'"' '{print $4}')
-
 echo "Subscribing to API..."
 curl -sk -o /dev/null -X POST "https://localhost:9500/api/am/devportal/v3/subscriptions" \
 -H "Authorization: Bearer $ACCESS_TOKEN" \
@@ -55,7 +74,7 @@ curl -sk -o /dev/null -X POST "https://localhost:9500/api/am/devportal/v3/subscr
 -d "{
   \"applicationId\": \"$APPLICATION_UUID\",
   \"apiId\": \"$API_UUID\",
-  \"throttlingPolicy\": \"Unlimited\"
+  \"throttlingPolicy\": \"SampleMonetizationPolicy\"
 }"
 echo "Subscribed to API"
 

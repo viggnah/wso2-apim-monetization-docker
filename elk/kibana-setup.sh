@@ -13,11 +13,7 @@ until curl --output /dev/null --silent --head --fail -u "$ELASTIC_USER:$ELASTIC_
     sleep 1
 done
 
-# Wait for Kibana to be up
-# until $(curl --output /dev/null --silent --head --fail -u $ELASTIC_USER:$ELASTIC_PASSWORD "$KIBANA_URL/api/status"); do
-#     echo "Waiting for Kibana to start..."
-#     sleep 10
-# done
+printf "\nKibana is up\n"
 
 # Delete index patterns
 # for pattern in "apim_event*" "apim_event_faulty" "apim_event_response"; do
