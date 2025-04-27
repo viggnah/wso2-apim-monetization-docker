@@ -110,7 +110,7 @@ type = "elk"
 
 [apim.monetization]
 monetization_impl = "org.wso2.apim.monetization.impl.StripeMonetizationImpl"
-analytics_host = "elasticsearch"
+analytics_host = "http://localhost"
 analytics_port = 9200
 analytics_username = "elastic"
 analytics_password = "changeme"

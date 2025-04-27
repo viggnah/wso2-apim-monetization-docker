@@ -36,7 +36,7 @@ ACCESS_TOKEN=$(curl -sk https://localhost:9500/oauth2/token \
 API_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/apis" | grep -o '"id":"[^"]*' | awk -F'"' '{print $4}')
 
 echo "Enabling monetization for API..."
-curl -k -X POST "https://localhost:9500/api/am/publisher/v4/apis/$API_UUID/monetize" \
+curl -sk -o /dev/null -X POST "https://localhost:9500/api/am/publisher/v4/apis/$API_UUID/monetize" \
 -H "Authorization: Bearer $ACCESS_TOKEN" \
 -H "Content-Type: application/json" \
 -d "{
@@ -50,10 +50,9 @@ echo "Creating App in Devportal..."
 APPLICATION_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/applications?query=SampleMonetizationApp" \
   -H "Authorization: Bearer $ACCESS_TOKEN" | grep -o '"applicationId":"[^"]*' | awk -F'"' '{print $4}')
 if [ ! -z "$APPLICATION_UUID" ]; then
-  echo "Deleting old app with the same name..."
+  echo "Oops deleting an old app with the same name first..."
   curl -sk -H "Authorization: Bearer $ACCESS_TOKEN" \
     -X DELETE "https://localhost:9500/api/am/devportal/v3/applications/$APPLICATION_UUID"
-  echo "App Deleted"
 fi
 
 APPLICATION_UUID=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/applications" \
@@ -65,7 +64,6 @@ APPLICATION_UUID=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/
   "description": "Sample App for Monetization",
   "tokenType": "JWT"
 }' | grep -o '"applicationId":"[^"]*' | awk -F'"' '{print $4}')
-echo "App Created"
 
 echo "Subscribing to API..."
 curl -sk -o /dev/null -X POST "https://localhost:9500/api/am/devportal/v3/subscriptions" \
@@ -76,7 +74,6 @@ curl -sk -o /dev/null -X POST "https://localhost:9500/api/am/devportal/v3/subscr
   \"apiId\": \"$API_UUID\",
   \"throttlingPolicy\": \"SampleMonetizationPolicy\"
 }"
-echo "Subscribed to API"
 
 echo "Generating Keys for App..."
 RESPONSE=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/applications/$APPLICATION_UUID/generate-keys" \
@@ -92,7 +89,6 @@ RESPONSE=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/applicat
 }')
 KEY_MAPPING_ID=$(echo "$RESPONSE" | grep -o '"keyMappingId":"[^"]*' | awk -F'"' '{print $4}')
 CONSUMER_SECRET=$(echo "$RESPONSE" | grep -o '"consumerSecret":"[^"]*' | awk -F'"' '{print $4}')
-echo "App Keys Generated"
 
 echo "Generating Application Tokens..."
 APP_ACCESS_TOKEN=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/applications/$APPLICATION_UUID/oauth-keys/$KEY_MAPPING_ID/generate-token" \
@@ -103,12 +99,10 @@ APP_ACCESS_TOKEN=$(curl -sk -X POST "https://localhost:9500/api/am/devportal/v3/
   \"validityPeriod\": 3600,
   \"grantType\": \"CLIENT_CREDENTIALS\"
 }" | grep -o '"accessToken":"[^"]*' | awk -F'"' '{print $4}')
-echo "Application Tokens Generated"
 
-echo "Trying to make PizzaShackAPI calls..."
+echo "Making PizzaShackAPI calls..."
 for i in {1..5}; do
   curl -sk -o /dev/null "https://localhost:8300/pizzashack/1.0.0/menu" \
     -H "accept: application/json" \
     -H "Authorization: Bearer $APP_ACCESS_TOKEN"
 done
-echo "Made some PizzaShackAPI calls"

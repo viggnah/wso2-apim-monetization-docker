@@ -6,7 +6,7 @@
 # Wait for the WSO2 API Manager to be ready
 until curl -sk https://localhost:9500/services/Version | grep -q "WSO2 API Manager"; do
     echo "Waiting for WSO2 API Manager to start..."
-    sleep 5
+    sleep 0.5
 done
 
 ./update-tenant-admin-key.sh

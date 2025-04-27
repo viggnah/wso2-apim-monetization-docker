@@ -23,24 +23,26 @@ ENCODED_CREDENTIALS=$(echo -n "$CLIENT_ID:$CLIENT_SECRET" | base64)
 # Step 3: Get access token
 ACCESS_TOKEN=$(curl -sk https://localhost:9500/oauth2/token \
 -H "Authorization: Basic $ENCODED_CREDENTIALS" \
--d "grant_type=password&username=admin&password=admin&scope=apim:subscribe apim:sub_manage apim:admin apim:tier_view apim:admin_tier_view apim:tier_manage apim:admin_tier_manage apim:policies_import_export" | grep -o '"access_token":"[^"]*' | awk -F'"' '{print $4}')
+-d "grant_type=password&username=admin&password=admin&scope=apim:subscribe apim:sub_manage apim:admin apim:tier_view apim:admin_tier_view apim:tier_manage apim:admin_tier_manage apim:policies_import_export apim:app_manage apim:app_import_export" | grep -o '"access_token":"[^"]*' | awk -F'"' '{print $4}')
 
 API_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/apis" | grep -o '"id":"[^"]*' | awk -F'"' '{print $4}')
 
-APPLICATION_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/applications?query=SampleMonetizationApp" \
-  -H "Authorization: Bearer $ACCESS_TOKEN" | grep -o '"applicationId":"[^"]*' | awk -F'"' '{print $4}')
+APPLICATION_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/applications?query=SampleMonetizationApp" -H "Authorization: Bearer $ACCESS_TOKEN" | grep -o '"applicationId":"[^"]*' | awk -F'"' '{print $4}')
 
-echo "Unsubscribing from API..."
-SUBSCRIPTION_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/subscriptions?apiId=$API_UUID&applicationId=$APPLICATION_UUID" \
--H "Authorization: Bearer $ACCESS_TOKEN" | grep -o '"subscriptionId":"[^"]*' | awk -F'"' '{print $4}')
+# echo "Unsubscribing from API..."
+# SUBSCRIPTION_UUID=$(curl -sk "https://localhost:9500/api/am/devportal/v3/subscriptions?apiId=$API_UUID&applicationId=$APPLICATION_UUID" \
+# -H "Authorization: Bearer $ACCESS_TOKEN" | grep -o '"subscriptionId":"[^"]*' | awk -F'"' '{print $4}')
 
-curl -sk -o /dev/null -X DELETE "https://localhost:9500/api/am/devportal/v3/subscriptions/$SUBSCRIPTION_UUID" \
--H "Authorization: Bearer $ACCESS_TOKEN" \
--H "Content-Type: application/json"
+# curl -sk -X DELETE "https://localhost:9500/api/am/devportal/v3/subscriptions/$SUBSCRIPTION_UUID" \
+# -H "Authorization: Bearer $ACCESS_TOKEN" \
+# -H "Content-Type: application/json"
 
 echo "Deleting commercial subscription policy - \$1.10 per API call..."
 POLICY_UUID=$(curl -sk "https://localhost:9500/api/am/admin/v4/throttling/policies/subscription" \
 -H "Authorization: Bearer $ACCESS_TOKEN" | grep -o '"policyId":"[^"]*"\|"policyName":"SampleMonetizationPolicy"' | grep -B1 'SampleMonetizationPolicy' | head -1 | awk -F'"' '{print $4}')
 
-curl -sk -o /dev/null -X DELETE https://localhost:9500/api/am/admin/v4/throttling/policies/subscription/$POLICY_UUID \
+curl -sk -X DELETE https://localhost:9500/api/am/admin/v4/throttling/policies/subscription/$POLICY_UUID \
 -H "Authorization: Bearer $ACCESS_TOKEN"
+
+# -o /dev/null
+# -o /dev/null

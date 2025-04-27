@@ -2,16 +2,28 @@
 
 # alias docker=nerdctl
 
-docker compose down --remove-orphans
+chmod +x ./stop.sh
+./stop.sh
+
 docker compose up -d
 
 chmod +x ./elk/kibana-setup.sh
 ./elk/kibana-setup.sh
 
+spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+i=0
+seconds=0
+
 while [[ $(curl -sk -o /dev/null -w "%{http_code}" https://localhost:8300/pizzashack/1.0.0/menu) != 401 ]]; do
-    echo "Hold on... waiting for WSO2 API Manager to be ready with the sample PizzaShackAPI"
-    sleep 10
+    i=$(( (i+1) % ${#spin} ))
+    message="${spin:$i:1} WSO2 API Manager with sample PizzaShackAPI"
+    timer=$(printf "%5.1fs" "$seconds")
+    printf "\r%*s\r%s\n" $(tput cols) "$timer" "$message";
+
+    sleep 0.1
+    seconds=$(echo "$seconds + 0.1" | bc)
 done
+printf "\r✅ WSO2 API Manager with sample PizzaShackAPI\n"
 
 # chmod +x ./apim/make-requests.sh
 # ./apim/make-requests.sh
@@ -27,5 +39,3 @@ done
 # echo "Username: elastic"
 # echo "Password: changeme"
 # echo "\n"
-
-# docker compose logs -f

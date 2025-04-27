@@ -5,15 +5,21 @@ NDJSON_FILE="./elk/export.ndjson"
 ELASTIC_USER="elastic"
 ELASTIC_PASSWORD="changeme"
 
-spinner="/-\|"
+spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
 i=0
+seconds=0
+spaces=$( (tput cols)-1 )
 
 until curl --output /dev/null --silent --head --fail -u "$ELASTIC_USER:$ELASTIC_PASSWORD" "$KIBANA_URL/api/status"; do
-    printf "\rWaiting for Kibana to start... %s" "${spinner:i++%${#spinner}:1}"
-    sleep 1
-done
+    i=$(( (i+1) % ${#spin} ))
+    message="${spin:$i:1} Kibana with dashboards"
+    timer=$(printf "%5.1fs" "$seconds")
+    printf "\r%*s\r%s" $(tput cols) "$timer" "$message";
 
-printf "\nKibana is up\n"
+    sleep 0.1
+    seconds=$(echo "$seconds + 0.1" | bc)
+done
+printf "\r✅ Kibana with dashboards\r" $(tput cols) "%5.1fs\n" "$seconds"
 
 # Delete index patterns
 # for pattern in "apim_event*" "apim_event_faulty" "apim_event_response"; do
