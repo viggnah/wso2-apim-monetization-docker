@@ -4,6 +4,7 @@
 # Using -k for self-signed cert
 # 9500 is my port
 
+printf "= Publishing usage data from Elasticsearch to Stripe"
 # Step 1: Register DCR client
 DCR_RESPONSE=$(curl -sk -X POST https://localhost:9500/client-registration/v0.17/register \
 -H "Authorization: Basic YWRtaW46YWRtaW4=" \
@@ -29,5 +30,7 @@ ACCESS_TOKEN=$(curl -sk -X POST https://localhost:9500/oauth2/token \
 -d "grant_type=password&username=admin&password=admin&scope=apim:monetization_usage_publish" | grep -o '"access_token":"[^"]*' | awk -F'"' '{print $4}')
 
 # Step 4: Publish usage data to the Stripe billing engine & Monitor the status of publishing
-curl -k -H "Authorization: Bearer $ACCESS_TOKEN" -X POST -H "Content-Type: application/json" https://localhost:9500/api/am/admin/v4/monetization/publish-usage
-curl -k -H "Authorization: Bearer $ACCESS_TOKEN" -X GET -H "Content-Type: application/json" https://localhost:9500/api/am/admin/v4/monetization/publish-usage/status
+curl -sk -o /dev/null -H "Authorization: Bearer $ACCESS_TOKEN" -X POST -H "Content-Type: application/json" https://localhost:9500/api/am/admin/v4/monetization/publish-usage
+curl -sk -o /dev/null -H "Authorization: Bearer $ACCESS_TOKEN" -X GET -H "Content-Type: application/json" https://localhost:9500/api/am/admin/v4/monetization/publish-usage/status
+
+printf "\r✅ Published usage data from Elasticsearch to Stripe\n"

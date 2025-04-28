@@ -18,7 +18,7 @@ until curl --output /dev/null --silent --head --fail -u "$ELASTIC_USER:$ELASTIC_
     sleep 0.1
     seconds=$(echo "$seconds + 0.1" | bc)
 done
-printf "\r✅ Kibana with dashboards\r" $(tput cols) "%5.1fs\n" "$seconds"
+printf "\r✅ Kibana with dashboards\n"
 
 # Delete index patterns
 # for pattern in "apim_event*" "apim_event_faulty" "apim_event_response"; do

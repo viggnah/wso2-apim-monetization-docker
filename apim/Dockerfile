@@ -1,4 +1,4 @@
-FROM wso2/wso2am:4.3.0-rocky
+FROM wso2/wso2am:4.5.0-rocky
 
 RUN curl -LO https://github.com/wso2/product-apim-tooling/releases/download/v4.3.1/apictl-4.3.1-linux-amd64.tar.gz \
     && tar -xzf apictl-4.3.1-linux-amd64.tar.gz

@@ -4,7 +4,7 @@
 if [ -f secrets.env ]; then
   source secrets.env
 else
-  echo "Secrets file not found!"
+  echo "Secrets file not found! This should have been created when you provided the secrets on the first run."
   exit 1
 fi
 

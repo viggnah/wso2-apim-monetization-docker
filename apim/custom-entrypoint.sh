@@ -9,7 +9,7 @@ until curl -sk https://localhost:9500/services/Version | grep -q "WSO2 API Manag
     sleep 0.5
 done
 
-# No need to chmod +x because these run from within the container
+# No need to chmod +x because it's being done in the Dockerfile
 ./update-tenant-admin-key.sh
 ./create-commercial-sub-policy.sh
 
