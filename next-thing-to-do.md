@@ -1,6 +1,6 @@
-NO MORE ISSUES!!!
+Was not able to remove subscription, then figure out that the encoded credentials had extra characters. Finally saw that the top line of the script was "#!/bin/sh" instead of "#!/bin/bash". Unbelievable.
 
-Note: The plugin only expects http connection to elasticsearch so if you have HTTPS you have to modify the plugin to accept it. Basically have to change to HTTPS connection and give the public self-signed elasticsearch cert as SSL context to the connection. 
+> Note: The plugin only expects http connection to elasticsearch so if you have HTTPS you have to modify the plugin to accept it. Basically have to change to HTTPS connection and give the public self-signed elasticsearch cert as SSL context to the connection. 
 
 https://apim.docs.wso2.com/en/4.3.0/design/api-monetization/monetizing-an-api/
 
