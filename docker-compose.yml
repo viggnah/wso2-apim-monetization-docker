@@ -17,10 +17,10 @@ services:
       # - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      timeout: 120s
-      retries: 5
-      start_period: 30s
+      interval: 3s
+      timeout: 150s
+      retries: 25
+      start_period: 5s
   
   wso2-apim:
     # image: wso2/wso2am:4.3.0-rocky
@@ -32,14 +32,14 @@ services:
       - "8300:8300"
       - "9500:9500"
     volumes:
-      - ./apim/deployment.toml:/home/wso2carbon/wso2am-4.3.0/repository/conf/deployment.toml
-      - shared_logs:/home/wso2carbon/wso2am-4.3.0/repository/logs
-      - ./apim/mysql-connector-java-8.0.29.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/mysql-connector-java-8.0.29.jar
-      - ./apim/stripe-java-9.8.0.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/stripe-java-9.8.0.jar
-      - ./apim/jakarta.json-api-2.1.1.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/jakarta.json-api-2.1.1.jar
-      - ./apim/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar
-      # - /Users/viggnah/Products/test-apps/scratch/wso2-am-stripe-plugin/target/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar:/home/wso2carbon/wso2am-4.3.0/repository/components/lib/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar
-      - ./apim/default-workflow-extensions.xml:/home/wso2carbon/wso2am-4.3.0/repository/resources/default-workflow-extensions.xml
+      - ./apim/deployment.toml:/home/wso2carbon/wso2am-4.5.0/repository/conf/deployment.toml
+      - shared_logs:/home/wso2carbon/wso2am-4.5.0/repository/logs
+      - ./apim/mysql-connector-java-8.0.29.jar:/home/wso2carbon/wso2am-4.5.0/repository/components/lib/mysql-connector-java-8.0.29.jar
+      - ./apim/stripe-java-9.8.0.jar:/home/wso2carbon/wso2am-4.5.0/repository/components/lib/stripe-java-9.8.0.jar
+      - ./apim/jakarta.json-api-2.1.1.jar:/home/wso2carbon/wso2am-4.5.0/repository/components/lib/jakarta.json-api-2.1.1.jar
+      - ./apim/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar:/home/wso2carbon/wso2am-4.5.0/repository/components/lib/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar
+      # - /Users/viggnah/Products/test-apps/scratch/wso2-am-stripe-plugin/target/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar:/home/wso2carbon/wso2am-4.5.0/repository/components/lib/org.wso2.apim.monetization.impl-1.5.1-SNAPSHOT.jar
+      - ./apim/default-workflow-extensions.xml:/home/wso2carbon/wso2am-4.5.0/repository/resources/default-workflow-extensions.xml
     # logging:
     #   driver: fluentd
     #   options:

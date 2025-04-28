@@ -1,3 +1,6 @@
+Get it working with APIM 4.5.0!!!
+It has some file permission issues, try running with root fully and see if it solves. 
+
 Just keep filling random data. At payouts choose the Stripe test option (somewhere near the bottom I think)
 
 Was not able to remove subscription, then figure out that the encoded credentials had extra characters. Finally saw that the top line of the script was "#!/bin/sh" instead of "#!/bin/bash". Unbelievable.
@@ -6,7 +9,6 @@ Was not able to remove subscription, then figure out that the encoded credential
 
 https://apim.docs.wso2.com/en/4.3.0/design/api-monetization/monetizing-an-api/
 
-CURRENT ISSUES IS THIS:
 Says no such index on elastic search even though it exists
 wso2-apim      | [2025-04-28 13:55:35,656] ERROR - MonetizationUsagePublishAgent Failed to publish monetization usage to billing Engine
 wso2-apim      | co.elastic.clients.elasticsearch._types.ElasticsearchException: [es/search] failed: [index_not_found_exception] no such index [apim_event_response]

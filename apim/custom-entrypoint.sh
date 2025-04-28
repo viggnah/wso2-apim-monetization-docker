@@ -1,4 +1,8 @@
 #!/bin/sh
+set -e # Exit immediately if a command exits with a non-zero status.
+
+# Change ownership of the logs directory to the wso2carbon user/group
+chown -R wso2carbon:wso2carbon /home/wso2carbon/wso2am-4.5.0/repository/logs || echo "WARNING FROM CUSTOM ENTRYPOINT: Failed to chown logs dir, proceeding anyway..."
 
 # Call the original entrypoint script
 ./docker-entrypoint.sh &
@@ -9,7 +13,7 @@ until curl -sk https://localhost:9500/services/Version | grep -q "WSO2 API Manag
     sleep 0.5
 done
 
-# No need to chmod +x because it's being done in the Dockerfile
+# No need to chmod +x because it's been done in the Dockerfile
 ./update-tenant-admin-key.sh
 ./create-commercial-sub-policy.sh
 

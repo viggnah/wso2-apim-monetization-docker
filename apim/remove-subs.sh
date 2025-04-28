@@ -2,7 +2,7 @@
 
 # alias docker=nerdctl
 
-printf "= Checking and deleting any previous commercial policy (\$1.10 per API call) to keep Stripe clean"
+printf "= Checking and deleting any previous commercial policy (\$1.10 per API call) created with this setup to keep Stripe clean"
 
 # Step 1: Register DCR client
 DCR_RESPONSE=$(curl -sk -X POST https://localhost:9500/client-registration/v0.17/register \
@@ -45,4 +45,4 @@ POLICY_UUID=$(curl -sk "https://localhost:9500/api/am/admin/v4/throttling/polici
 curl -sk -o /dev/null -X DELETE https://localhost:9500/api/am/admin/v4/throttling/policies/subscription/$POLICY_UUID \
 -H "Authorization: Bearer $ACCESS_TOKEN"
 
-printf "\r\033[K✅ Check and delete any previous commercial policy (\$1.10 per API call) to keep Stripe clean\n"
+printf "\r\033[K✅ Check and delete any previous commercial policy (\$1.10 per API call) created with this setup to keep Stripe clean\n"

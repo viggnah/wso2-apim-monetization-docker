@@ -105,4 +105,4 @@ for i in {1..5}; do
     -H "accept: application/json" \
     -H "Authorization: Bearer $APP_ACCESS_TOKEN"
 done
-printf "\r✅ Made API calls to simulate traffic, view on ELK dashboard\n"
+printf "\r✅ Made API calls to simulate traffic, view on Kibana dashboard\n"

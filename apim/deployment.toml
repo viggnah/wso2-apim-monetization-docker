@@ -54,6 +54,9 @@ type = "JKS"
 #alias =  "wso2carbon"
 #key_password =  "wso2carbon"
 
+[apim]
+gateway_type = "Regular,APK,AWS"
+
 [[apim.gateway.environment]]
 description = "This is a hybrid gateway that handles both production and sandbox token traffic."
 display_in_api_console = true
@@ -103,9 +106,6 @@ gateway_labels = ["Default"]
 #[apim.cache.tags]
 #expiry_time = "2m"
 
-[admin_service.wsdl]
-enable = true
-
 [apim.analytics]
 enable = true
 # auth_token = ""
@@ -124,13 +124,20 @@ display_name = "ConnectedAccountKey"
 name = "ConnectedAccountKey"
 required = "true"
 
+# [apim.ai]
+# enable = true
+# endpoint = ""
+# token = ""
+
 [apim.ai]
 enable = true
-endpoint = ""
-token = ""
+key = ""
+
+# [apim.key_manager]
+# enable_apikey_subscription_validation = true
 
 [apim.key_manager]
-enable_apikey_subscription_validation = true
+enable_lightweight_apikey_generation = true
 #service_url = "https://localhost:${mgt.transport.https.port}/services/"
 #username = "$ref{super_admin.username}"
 #password = "$ref{super_admin.password}"
