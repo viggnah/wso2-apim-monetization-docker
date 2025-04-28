@@ -37,7 +37,7 @@ curl -X GET "http://elasticsearch:9200/apim_event_response/_search?pretty" -u "e
   "query": {
     "match_all": {}
   },
-  "size": 5,
+  "size": 2,
   "sort": [
     {
       "@timestamp": {

@@ -1,14 +1,14 @@
 [server]
-hostname = "localhost"
-offset=57
 base_path = "${carbon.protocol}://${carbon.host}:${carbon.management.port}"
+hostname = "localhost"
+offset = 57
 #discard_empty_caches = false
 server_role = "default"
 
 [super_admin]
-username = "admin"
-password = "admin"
 create_admin_account = true
+password = "admin"
+username = "admin"
 
 [user_store]
 type = "database_unique_id"
@@ -18,24 +18,24 @@ type = "database_unique_id"
 # url = "jdbc:h2:./repository/database/WSO2AM_DB;DB_CLOSE_ON_EXIT=FALSE"
 # username = "wso2carbon"
 # password = "wso2carbon"
+driver = "com.mysql.cj.jdbc.Driver"
+password = "wso2carbon"
 type = "mysql"
 url = "jdbc:mysql://mysql:3306/WSO2AM_DB?useSSL=false&amp;allowPublicKeyRetrieval=true"
 username = "wso2carbon"
-password = "wso2carbon"
-driver = "com.mysql.cj.jdbc.Driver"
 
 [database.shared_db]
+password = "wso2carbon"
 type = "h2"
 url = "jdbc:h2:./repository/database/WSO2SHARED_DB;DB_CLOSE_ON_EXIT=FALSE"
 username = "wso2carbon"
-password = "wso2carbon"
 
 [keystore.tls]
-file_name =  "wso2carbon.jks"
-type =  "JKS"
-password =  "wso2carbon"
-alias =  "wso2carbon"
-key_password =  "wso2carbon"
+alias = "wso2carbon"
+file_name = "wso2carbon.jks"
+key_password = "wso2carbon"
+password = "wso2carbon"
+type = "JKS"
 
 #[keystore.listener_profile]
 #bind_address = "0.0.0.0"
@@ -55,25 +55,25 @@ key_password =  "wso2carbon"
 #key_password =  "wso2carbon"
 
 [[apim.gateway.environment]]
-name = "Default"
-type = "hybrid"
-gateway_type = "Regular"
-provider = "wso2"
-display_in_api_console = true
 description = "This is a hybrid gateway that handles both production and sandbox token traffic."
-show_as_token_endpoint_url = true
-service_url = "https://localhost:${mgt.transport.https.port}/services/"
-username= "${admin.username}"
-password= "${admin.password}"
-ws_endpoint = "ws://localhost:9099"
-wss_endpoint = "wss://localhost:8099"
+display_in_api_console = true
+gateway_type = "Regular"
 http_endpoint = "http://localhost:${http.nio.port}"
 https_endpoint = "https://localhost:${https.nio.port}"
+name = "Default"
+password = "${admin.password}"
+provider = "wso2"
+service_url = "https://localhost:${mgt.transport.https.port}/services/"
+show_as_token_endpoint_url = true
+type = "hybrid"
+username = "${admin.username}"
 websub_event_receiver_http_endpoint = "http://localhost:9021"
 websub_event_receiver_https_endpoint = "https://localhost:8021"
+ws_endpoint = "ws://localhost:9099"
+wss_endpoint = "wss://localhost:8099"
 
 [apim.sync_runtime_artifacts.gateway]
-gateway_labels =["Default"]
+gateway_labels = ["Default"]
 
 #[apim.cache.gateway_token]
 #enable = true
@@ -103,28 +103,31 @@ gateway_labels =["Default"]
 #[apim.cache.tags]
 #expiry_time = "2m"
 
+[admin_service.wsdl]
+enable = true
+
 [apim.analytics]
 enable = true
 # auth_token = ""
 type = "elk"
 
 [apim.monetization]
-monetization_impl = "org.wso2.apim.monetization.impl.StripeMonetizationImpl"
-analytics_host = "http://localhost"
+analytics_host = "elasticsearch"
+analytics_password = "changeme"
 analytics_port = 9200
 analytics_username = "elastic"
-analytics_password = "changeme"
+monetization_impl = "org.wso2.apim.monetization.impl.StripeMonetizationImpl"
 
 [[apim.monetization.additional_attributes]]
-name = "ConnectedAccountKey"
-display_name = "ConnectedAccountKey"
-required = "true"
 description = "Connected account of the publisher eg: acct_1L2XXuLfF1iJabcL"
+display_name = "ConnectedAccountKey"
+name = "ConnectedAccountKey"
+required = "true"
 
 [apim.ai]
 enable = true
-token = ""
 endpoint = ""
+token = ""
 
 [apim.key_manager]
 enable_apikey_subscription_validation = true
@@ -181,10 +184,10 @@ enable_apikey_subscription_validation = true
 #enable_portal_configuration_only_mode = false
 
 [apim.cors]
-allow_origins = "*"
-allow_methods = ["GET","PUT","POST","DELETE","PATCH","OPTIONS"]
-allow_headers = ["authorization","Access-Control-Allow-Origin","Content-Type","SOAPAction","apikey","Internal-Key"]
 allow_credentials = false
+allow_headers = ["authorization", "Access-Control-Allow-Origin", "Content-Type", "SOAPAction", "apikey", "Internal-Key"]
+allow_methods = ["GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"]
+allow_origins = "*"
 
 #[apim.throttling]
 #enable_data_publishing = true
@@ -263,8 +266,8 @@ allow_credentials = false
 #persistent_notifier.password = "root"
 
 [[event_handler]]
-name="userPostSelfRegistration"
-subscriptions=["POST_ADD_USER"]
+name = "userPostSelfRegistration"
+subscriptions = ["POST_ADD_USER"]
 
 [service_provider]
 sp_name_regex = "^[\\sa-zA-Z0-9._-]*$"
@@ -274,18 +277,18 @@ url = "jdbc:h2:./repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE"
 
 [[event_listener]]
 id = "token_revocation"
-type = "org.wso2.carbon.identity.core.handler.AbstractIdentityHandler"
 name = "org.wso2.is.notification.ApimOauthEventInterceptor"
 order = 1
+type = "org.wso2.carbon.identity.core.handler.AbstractIdentityHandler"
 [event_listener.properties]
-notification_endpoint = "https://localhost:${mgt.transport.https.port}/internal/data/v1/notify"
-username = "${admin.username}"
-password = "${admin.password}"
 'header.X-WSO2-KEY-MANAGER' = "default"
+notification_endpoint = "https://localhost:${mgt.transport.https.port}/internal/data/v1/notify"
+password = "${admin.password}"
+username = "${admin.username}"
 
 [oauth.grant_type.token_exchange]
-enable = true
 allow_refresh_tokens = true
+enable = true
 iat_validity_period = "1h"
 
 #[integration.transaction_counter]

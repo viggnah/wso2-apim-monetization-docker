@@ -8,7 +8,6 @@ ELASTIC_PASSWORD="changeme"
 spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
 i=0
 seconds=0
-spaces=$( (tput cols)-1 )
 
 until curl --output /dev/null --silent --head --fail -u "$ELASTIC_USER:$ELASTIC_PASSWORD" "$KIBANA_URL/api/status"; do
     i=$(( (i+1) % ${#spin} ))

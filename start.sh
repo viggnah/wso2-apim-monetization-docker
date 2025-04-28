@@ -18,15 +18,15 @@ while [[ $(curl -sk -o /dev/null -w "%{http_code}" https://localhost:8300/pizzas
     i=$(( (i+1) % ${#spin} ))
     message="${spin:$i:1} WSO2 API Manager with sample PizzaShackAPI"
     timer=$(printf "%5.1fs" "$seconds")
-    printf "\r%*s\r%s\n" $(tput cols) "$timer" "$message";
+    printf "\r%*s\r%s" $(tput cols) "$timer" "$message";
 
     sleep 0.1
     seconds=$(echo "$seconds + 0.1" | bc)
 done
 printf "\r✅ WSO2 API Manager with sample PizzaShackAPI\n"
 
-# chmod +x ./apim/make-requests.sh
-# ./apim/make-requests.sh
+chmod +x ./apim/make-requests.sh
+./apim/make-requests.sh
 
 # echo "\n\n--- Service Access Information ---"
 # echo "API Manager"
