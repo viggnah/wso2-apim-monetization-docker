@@ -2,7 +2,7 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 
 # Change ownership of the logs directory to the wso2carbon user/group
-chown -R wso2carbon:wso2carbon /home/wso2carbon/wso2am-4.5.0/repository/logs || echo "WARNING FROM CUSTOM ENTRYPOINT: Failed to chown logs dir, proceeding anyway..."
+# chown 10001:10001 /home/wso2carbon/wso2am-4.5.0/repository/
 
 # Call the original entrypoint script
 ./docker-entrypoint.sh &

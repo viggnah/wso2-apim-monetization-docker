@@ -408,6 +408,54 @@ curl -sk -o /dev/null -X PUT https://localhost:9500/api/am/admin/v4/tenant-confi
       {
         \"Name\": \"apim:gateway_policy_view\",
         \"Roles\": \"admin,Internal/creator,Internal/publisher,Internal/observer\"
+      },
+      {
+        \"Name\": \"apim:llm_provider_manage\",
+        \"Roles\": \"admin\"
+      },
+      {
+        \"Name\": \"apim:llm_provider_read\",
+        \"Roles\": \"admin,Internal/publisher,Internal/creator\"
+      },
+      {
+        \"Name\": \"apim:gov_rule_manage\",
+        \"Roles\": \"admin\"
+      },
+      {
+        \"Name\": \"apim:gov_rule_read\",
+        \"Roles\": \"admin,Internal/publisher,Internal/creator,Internal/observer\"
+      },
+      {
+        \"Name\": \"apim:gov_result_read\",
+        \"Roles\": \"admin,Internal/publisher,Internal/creator,Internal/observer\"
+      },
+      {
+        \"Name\": \"apim:gov_policy_manage\",
+        \"Roles\": \"admin\"
+      },
+      {
+        \"Name\": \"apim:gov_policy_read\",
+        \"Roles\": \"admin,Internal/publisher,Internal/creator,Internal/observer\"
+      },
+      {
+        \"Name\": \"apim:organization_manage\",
+        \"Roles\": \"admin\"
+      },
+      {
+        \"Name\": \"apim:subscription_approval_view\",
+        \"Roles\": \"admin,Internal/publisher\"
+      },
+      {
+        \"Name\": \"apim:publisher_organization_read\",
+        \"Roles\": \"admin,Internal/creator\"
+      },
+      {
+        \"Name\": \"apim:organization_read\",
+        \"Roles\": \"admin\"
+      },
+      {
+        \"Name\": \"apim:subscription_approval_manage\",
+        \"Roles\": \"admin,Internal/publisher\"
       }
     ]
   },
@@ -459,5 +507,6 @@ curl -sk -o /dev/null -X PUT https://localhost:9500/api/am/admin/v4/tenant-confi
     \"SignUpRoles\": [
       \"Internal/subscriber\"
     ]
-  }
+  },
+  \"AllowSubscriptionValidationDisabling\": false
 }"

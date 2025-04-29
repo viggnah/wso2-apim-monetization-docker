@@ -1,5 +1,15 @@
-Get it working with APIM 4.5.0!!!
-It has some file permission issues, try running with root fully and see if it solves. 
+Get it working with APIM 4.5.0!
+
+Issue with perms on secrets.env, changed it to container user in Dockerfile, then can read it. But was still failing because 4.5.0 tenant API call was different, changing that helped. Tested it by running the curl command after sshing into the wso2-apim container. 
+
+
+
+It has some file permission issues, try running with root fully and see if it solves. Actually running as root crashed something and wso2-apim just exited!
+wso2-apim      | qemu-x86_64: Could not open '/lib64/ld-linux-x86-64.so.2': No such file or directory
+This was because of using AMD APICTL tool download and install in Dockerfile, changing this to ARM fixed it, though I don't know how it was working earlier when I was using AMD version of 4.3.0 APICTL tool .
+
+But for the file permisssion issue, it seems liek fluentd running as root is creating the /logs directory to be root which is causing issues. Finally checked the `docker volume ls`, found that the volume had been created months ago. Deleting that, running fluentd without root, finally worked. Now APIM is able to open and write to the /logs directory. 
+
 
 Just keep filling random data. At payouts choose the Stripe test option (somewhere near the bottom I think)
 

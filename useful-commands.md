@@ -79,3 +79,9 @@ Turns out if the last line in the logstash.conf is commented out, you need a new
 # fluentd forward plugin buffers by default!
 It flushes the buffer every 60s. I had to set flush_mode to immediate so it never buffers!!
 
+# Built docker images are cached
+If you need something to change in your APIM docker image, make sure to remove and rebuild the docker image otherwise it picks up the previous one. For example, you modify the `./apim/secrets.env` but it won't be reflected in the docker image, unless rebuilt!
+
+# Check logs for only container
+docker logs wso2-apim
+docker logs -f wso2-apim

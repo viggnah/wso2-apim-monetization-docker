@@ -1,8 +1,8 @@
 # Spin up API Manager with ELK Stack and Try Monetization with One Command
 
-![API Manager](./repo-images/)
-![ELK](./repo-images/)
-![Stripe](./repo-images/)
+![API Manager](./repo-images/monetized-api.png)
+![ELK](./repo-images/elk-kibana-dashboard.png)
+![Stripe](./repo-images/dynamic-billing-usage.png)
 
 ## Before you start
 1. Install Rancher (I have only tested on Rancher, others like Docker Desktop may also work). I used Moby engine for testing, not containerd.

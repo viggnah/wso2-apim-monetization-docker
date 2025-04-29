@@ -52,7 +52,7 @@ services:
   fluentd:
     image: fluent/fluentd:v1.17.1-debian-1.0
     container_name: fluentd-agent
-    user: root
+    # user: root
     volumes:
       - ./elk/fluent.conf:/fluentd/etc/fluent.conf
       - shared_logs:/logs

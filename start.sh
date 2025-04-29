@@ -2,13 +2,13 @@
 
 # alias docker=nerdctl
 
-# Load the secrets
+### Load the secrets
 ENV_FILE="./apim/secrets.env"
 if [ -f "$ENV_FILE" ]; then
   printf "✅ Stripe keys already provided; stored at $ENV_FILE\n"
   source $ENV_FILE
 else
-  echo "$ENV_FILE not found! This must be the first time you are running the script. Please enter the keys you obtained from Stripe, these will be stored and reused on subsequent runs."
+  echo "$ENV_FILE not found! This must be the first time you are running the script. Please enter the keys you obtained from Stripe, these will be stored and reused on subsequent runs"
 
   # Prompt securely for keys
   read -p "Enter BillingEnginePlatformAccountKey (similar to sk_test_...): " BILLING_KEY
@@ -16,7 +16,7 @@ else
 
   # Validate keys 
   if [ -z "$BILLING_KEY" ] || [ -z "$CONNECTED_KEY" ]; then
-      echo "ERROR: Both keys must be provided."
+      echo "ERROR: Both keys must be provided"
       exit 1
   fi
 
@@ -25,7 +25,7 @@ else
   {
     echo "BillingEnginePlatformAccountKey=$BILLING_KEY"
     echo "ConnectedAccountKey=$CONNECTED_KEY"
-  } > "$ENV_FILE" || { echo "Error: Failed to write to $ENV_FILE. Check permissions."; exit 1; }
+  } > "$ENV_FILE" || { echo "Error: Failed to write to $ENV_FILE. Check permissions"; exit 1; }
 
   # Set secure permissions
   chmod 600 "$ENV_FILE"
@@ -34,26 +34,47 @@ else
   printf "\r✅ Created $ENV_FILE with secure permissions.\n"
 fi
 
-chmod +x ./stop.sh
-./stop.sh
+### Define your cleanup function
+cleanup() {
+    chmod +x ./stop.sh
+    ./stop.sh
+}
 
-docker compose up -d
+# trap cleanup SIGINT SIGTERM
+
+### Execute clean up and start docker compose
+cleanup
+docker-compose up -d
 
 chmod +x ./elk/kibana-setup.sh
 ./elk/kibana-setup.sh
 
+### WSO2 API Manager
+TIMEOUT_SECONDS=350
+SLEEP_DURATION=0.1
+start_time=$(date +%s) # Get the current time in seconds since epoch
+
 spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
 i=0
 seconds=0
+# elapsed_time=0
 
 while [[ $(curl -sk -o /dev/null -w "%{http_code}" https://localhost:8300/pizzashack/1.0.0/menu) != 401 ]]; do
+    current_time=$(date +%s)
+    seconds=$((current_time - start_time))
+    if [ $seconds -ge $TIMEOUT_SECONDS ]; then
+        printf "\r❌ ERROR: WSO2 API Manager did not become ready within ${TIMEOUT_SECONDS} seconds\n"
+        cleanup
+        exit 1 # Exit with a non-zero status (1) to indicate failure/timeout
+    fi
+
     i=$(( (i+1) % ${#spin} ))
     message="${spin:$i:1} WSO2 API Manager with sample PizzaShackAPI"
     timer=$(printf "%5.1fs" "$seconds")
     printf "\r%*s\r%s" $(tput cols) "$timer" "$message";
 
-    sleep 0.1
-    seconds=$(echo "$seconds + 0.1" | bc)
+    sleep $SLEEP_DURATION
+    # seconds=$(echo "$seconds + 0.1" | bc)
 done
 printf "\r✅ WSO2 API Manager with sample PizzaShackAPI\n"
 
@@ -63,6 +84,7 @@ chmod +x ./apim/make-requests.sh
 chmod +x ./apim/publish-monetization-data.sh
 ./apim/publish-monetization-data.sh
 
+### Print final output
 # --- Function to print a separator line ---
 print_separator() {
   printf '=%.0s' {1..60} # Print 60 '=' characters
