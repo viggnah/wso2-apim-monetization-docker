@@ -52,7 +52,7 @@ git clone https://github.com/viggnah/wso2-apim-monetization-docker && cd wso2-ap
 * *Password:* `changeme` 
 
 **Test**
-* Go to the devportal and make some API calls
+* Go to the devportal (make sure you are signed in) and make some API calls
 * The Kibana dashboard will automatically pick it up 
 * Go to your terminal and run 
 ```bash
@@ -67,6 +67,12 @@ git clone https://github.com/viggnah/wso2-apim-monetization-docker && cd wso2-ap
 4. Creates an app on the devportal (SampleMonetizationApp) and subscribes to this API
 5. Simulates a bit of traffic by making a few sample calls
 6. Pushes out the usage data to Stripe so that the subscription in the Connected account shows the due amount (eg: 5 calls at $1.10 per call - $5.50 is due)
+
+## Wind down
+* Go to your terminal and run 
+```bash
+~/.../wso2-apim-monetization-docker git:(main) ✗  ./stop.sh
+```
 
 ## Troubleshooting
 * Check logs: `docker compose logs -f`
