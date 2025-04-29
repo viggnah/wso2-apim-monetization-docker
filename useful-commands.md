@@ -1,7 +1,15 @@
-# Starting container
-docker run -it -p 8337:8337 -p 8300:8300 -p 9500:9500 --name api-manager wso2/wso2am:4.3.0-rocky
+## Check logs 
+docker compose logs -f
 
-# Starting a container with memory and cpu limits and custom deployment.toml
+## Check logs for only one container
+docker logs wso2-apim
+docker logs -f wso2-apim
+
+## Starting container
+docker run -it -p 8337:8337 -p 8300:8300 -p 9500:9500 --name api-manager wso2/wso2am:4.5.0-rocky
+
+## Starting a container with memory and cpu limits and custom deployment.toml
+```sh
 docker run -it --rm \
   --cpus="2" \
   --memory="2g" \
@@ -9,28 +17,29 @@ docker run -it --rm \
   -p 8337:8337 \
   -p 8300:8300 \
   -p 9500:9500 \
-  -v /Users/viggnah/Products/test-apps/wso2-apim-monetization-docker/apim/deployment.toml:/home/wso2carbon/wso2am-4.3.0/repository/conf/deployment.toml \
+  -v /Users/viggnah/Products/test-apps/wso2-apim-monetization-docker/apim/deployment.toml:/home/wso2carbon/wso2am-4.5.0/repository/conf/deployment.toml \
   wso2/wso2am:4.3.0-rocky
+```
 
-# SSHing into the container
+## SSHing into the container
 docker exec -it docker-monetization_mysql_1 bash
 mysql -u wso2carbon -p
 apt-get update && apt-get install telnet
 
-# Fix Rancher Desktop startup issue
+## Fix Rancher Desktop startup issue
 sudo mkdir -m 775 /private/var/run/rancher-desktop-lima
 
-# Copy files to and from a container and local file system
+## Copy files to and from a container and local file system
 docker cp docker-monetization_wso2-apim_1:/home/wso2carbon/wso2am-4.3.0/repository/conf/log4j2.properties ./log4j2.properties
 docker cp ./mysql-init/01-WSO2AM_DB-mysql.sql docker-monetization_mysql_1:/home/01-WSO2AM_DB-mysql.sql
 
-# Run MySQL script in the MySQL command line
+## Run MySQL script in the MySQL command line
 source /home/01-WSO2AM_DB-mysql.sql;
-# See collation and charset of database
+## See collation and charset of database
 USE WSO2AM_DB;
 show variables like "character_set_database";
 
-# Check on elasticsearch
+## Check on elasticsearch
 docker exec -it elasticsearch bash
 curl -u elastic:changeme http://elasticsearch:9200
 curl -X GET "http://elasticsearch:9200/apim_event_response/_search?pretty" -u "elastic:changeme" -H 'Content-Type: application/json' -d '{
@@ -47,41 +56,39 @@ curl -X GET "http://elasticsearch:9200/apim_event_response/_search?pretty" -u "e
   ]
 }'
 
-# Running fluentd locally
+## Running fluentd locally
 docker run -d --name fluentd -p 24224:24224 -p 24224:24224/udp fluent/fluentd:v1.17.1-debian-1.0
 
-# Interesting Rancher tidbit
+## Interesting Rancher tidbit
 Rancher desktop doesn't run natively on MacOS. It runs a Lima VM and runs on top of that. To access the Lima VM use - `rdctl shell`
 
-# Logging driver bug on nerdctl
+## Logging driver bug on nerdctl
 nerdctl only supports the following logging drivers as of now - **fluetnd, journald, json-file and syslog**. NO support for gelf and others which are supported by docker. 
 
 The unsolvable error - `FATA[0000] no log viewer type registered for logging driver "fluentd"`
 
-# Volumes vs Bind Mounts in Docker Compose
+## Volumes vs Bind Mounts in Docker Compose
 So confusing, read - https://maximorlov.com/docker-compose-syntax-volume-or-bind-mount/
 
-# Install apictl tool on APIM image
+## Install apictl tool inside APIM image
 curl -LO https://github.com/wso2/product-apim-tooling/releases/download/v4.3.1/apictl-4.3.1-darwin-arm64.tar.gz
 tar -xzf apictl-4.3.1-darwin-arm64.tar.gz -C /usr/local/bin
 
 curl -LO https://github.com/wso2/product-apim-tooling/releases/download/v4.3.1/apictl-4.3.1-linux-amd64.tar.gz
 tar -xzf apictl-4.3.1-linux-amd64.tar.gz -C /usr/local/bin
 
-# API readiness
+## API readiness
 API Manager is ready by checking /Services/Version, then you import the API but it takes a further 10 seconds to be pulled to the GW. In the interim the GW healthcheck says it's successfult because it has 0 APIs to start with (??)
 
-# Logstash Conf is absolutely quirky
+## Logstash Conf is absolutely quirky
 After failing to run logstash for an eternity, narrowed it down to the conf file. Then just ran the container, copied the conf file and did a validation:
 `logstash@logstash:~/pipeline$ /usr/share/logstash/bin/logstash --config.test_and_exit -f /usr/share/logstash/pipeline/logstash-2.conf`
-Turns out if the last line in the logstash.conf is commented out, you need a new line after that!!
+Turns out if the last line in the logstash.conf is commented out, you need a new line after that!
 
-# fluentd forward plugin buffers by default!
+I don't fully believe this, someething else must have been wrong.
+
+## fluentd forward plugin buffers by default!
 It flushes the buffer every 60s. I had to set flush_mode to immediate so it never buffers!!
 
-# Built docker images are cached
+## Built docker images are cached
 If you need something to change in your APIM docker image, make sure to remove and rebuild the docker image otherwise it picks up the previous one. For example, you modify the `./apim/secrets.env` but it won't be reflected in the docker image, unless rebuilt!
-
-# Check logs for only container
-docker logs wso2-apim
-docker logs -f wso2-apim

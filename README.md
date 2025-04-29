@@ -12,7 +12,7 @@ Stripe dashboard that reflect billing as per API usage:
 ![Stripe](./repo-images/dynamic-billing-usage.png)
 
 ## Before you start
-1. Install Rancher (I have only tested on Rancher, others like Docker Desktop may also work). I used Moby engine for testing, not containerd.
+1. Install Rancher (I have only tested on Rancher, others like Docker Desktop may also work. Also, I used Moby container engine, not containerd.)
 2. Install docker compose. 
 3. Create a Stripe account at https://dashboard.stripe.com/ if you don't have one. You need a couple of keys to connect WSO2 API Manager to Stripe. It's not a big deal, I'll explain:
     - Create a sandbox for testing, Stripe used to call this Test mode until recently.
@@ -68,5 +68,15 @@ git clone https://github.com/viggnah/wso2-apim-monetization-docker && cd wso2-ap
 5. Simulates a bit of traffic by making a few sample calls
 6. Pushes out the usage data to Stripe so that the subscription in the Connected account shows the due amount (eg: 5 calls at $1.10 per call - $5.50 is due)
 
+## Troubleshooting
+* Check logs: `docker compose logs -f`
+
+* Check logs for only one container: `docker logs wso2-apim`, `docker logs -f wso2-apim` (replace *wso2-apim* with desired container name as defined in docker-compose.yml, eg: mysql, logstash, fluentd-agent etc.)
+
+* SSH into container and check stuff inside: `docker exec -it wso2-apim bash`
+
+* For more useful commands and info, refer [this doc](./useful-commands.md). 
+
 ## Tested on
 Rancher 1.15.1 (Moby engine) on Mac OS Sonoma 14.4.1
+
