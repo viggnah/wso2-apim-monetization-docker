@@ -64,30 +64,6 @@ git clone https://github.com/viggnah/wso2-apim-monetization-docker && cd wso2-ap
 * *Username:* `elastic`
 * *Password:* `changeme` 
 
-**Test**
-* Go to the devportal (make sure you are signed in) and make some API calls
-* The Kibana dashboard will automatically pick it up 
-* Go to your terminal and run 
-```bash
-~/.../wso2-apim-monetization-docker git:(main) ✗  ./apim/publish-monetization-data.sh
-```
-* The Stripe connected account will get updated
-
-<!-- ## 🔗 Access Details -->
----
-
-* **API Manager**
-    * *Publisher Portal:* https://localhost:9500/publisher/apis
-    * *Developer Portal:* https://localhost:9500/devportal
-    * *Admin Portal:* https://localhost:9500/admin/dashboard
-    * *Username:* `admin`
-    * *Password:* `admin`
-
-* **Kibana Dashboard**
-    * *URL:* http://localhost:5601/app/dashboards#/view/f954a940-6ed4-11ec-9007-b93f9eb88870
-    * *Username:* `elastic`
-    * *Password:* `changeme`
-
 ---
 
 **✅ Testing the Flow**
@@ -131,7 +107,7 @@ git clone https://github.com/viggnah/wso2-apim-monetization-docker && cd wso2-ap
 *(This will stop and remove the Docker containers.)*
 
 
-## 🐛 Troubleshooting Tips
+## 🔍 Troubleshooting Tips
 
 * **Stuck on First Run?** Sometimes things hang, especially on the first go. Try stopping (`Ctrl+C`) and running `./start.sh` again.
 * **Rancher High CPU?** Check Activity Monitor (Mac) or Task Manager (Windows) for `qemu` processes using high CPU. This can happen sometimes with Rancher Desktop (see [this potential issue](https://github.com/rancher-sandbox/rancher-desktop/issues/7087)). If CPU is maxed out, restarting Rancher Desktop usually helps.
