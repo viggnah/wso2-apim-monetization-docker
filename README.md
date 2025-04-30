@@ -12,7 +12,7 @@ Stripe dashboard that reflect billing as per API usage:
 ![Stripe](./repo-images/dynamic-billing-usage.png)
 
 ## Before you start
-1. Install Rancher (I have only tested on Rancher, others like Docker Desktop may also work. Also, I used Moby container engine, not containerd.)
+1. Install Rancher (I have only tested on Rancher, others like Docker Desktop may also work. Also, I used Moby container engine, not containerd.). Ideal to allocate about 4-6 cores and 4-8 GB memory in Rancher (Preference > VM).
 2. Install docker compose. 
 3. Create a Stripe account at https://dashboard.stripe.com/ if you don't have one. You need a couple of keys to connect WSO2 API Manager to Stripe. It's not a big deal, I'll explain:
     - Create a sandbox for testing, Stripe used to call this Test mode until recently.
@@ -75,6 +75,13 @@ git clone https://github.com/viggnah/wso2-apim-monetization-docker && cd wso2-ap
 ```
 
 ## Troubleshooting
+* If it gets stuck on first execution, stop (ctrl+c) and run it again: `./start.sh`. Sometimes Rancher CPU usage spikes (probably related to https://github.com/rancher-sandbox/rancher-desktop/issues/7087), check this in Activity Monitor (or similar tool - process name will be qemu something). If this is the case, restart Rancher. 
+
+* Sometimes publishing to Stripe fails on start up, in which case, just run the publishing script:  
+```bash
+~/.../wso2-apim-monetization-docker git:(main) ✗  ./apim/publish-monetization-data.sh
+```
+
 * Check logs: `docker compose logs -f`
 
 * Check logs for only one container: `docker logs wso2-apim`, `docker logs -f wso2-apim` (replace *wso2-apim* with desired container name as defined in docker-compose.yml, eg: mysql, logstash, fluentd-agent etc.)
