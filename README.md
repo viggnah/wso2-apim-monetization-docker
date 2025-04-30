@@ -1,6 +1,5 @@
 # WSO2 API Manager Monetization Test Setup (with ELK)
 
-> [!WARNING]
 > ⚠️ **For Testing & Demo Purposes Only**
 >
 > This configuration is intended strictly for **local testing, experimentation, and demonstration**. It is **NOT** secured, optimized, or configured for production environments.
