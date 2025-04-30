@@ -1,5 +1,10 @@
 # WSO2 API Manager Monetization Test Setup (with ELK)
 
+> [!WARNING]
+> ⚠️ **For Testing & Demo Purposes Only**
+>
+> This configuration is intended strictly for **local testing, experimentation, and demonstration**. It is **NOT** secured, optimized, or configured for production environments.
+
 Get a full WSO2 API Manager setup with a monetized API, ELK analytics, and Stripe billing integration running with a single command.
 
 **Here's what you should see when it's up:**
